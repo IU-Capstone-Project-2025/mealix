@@ -4,15 +4,19 @@ import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.mealix.exception.UpdateHandleException;
+import ru.mealix.service.UserService;
 
 public abstract class ChainNode {
     private ChainNode next;
+    protected final UserService userService;
 
-    public ChainNode(ChainNode next) {
+    public ChainNode(ChainNode next, UserService userService) {
         this.next = next;
+        this.userService = userService;
     }
 
-    public ChainNode() {
+    public ChainNode(UserService userService) {
+        this.userService = userService;
     }
 
     public final void handle(Update update, DefaultAbsSender client) throws TelegramApiException {
