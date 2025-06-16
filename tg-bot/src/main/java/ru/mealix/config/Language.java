@@ -15,7 +15,16 @@ public enum Language {
     }
 
     public static Language fromUpdate(Update update) {
-        String languageCode = update.getCallbackQuery().getFrom().getLanguageCode();
-        return Language.valueOf(languageCode);
+        String languageCode;
+        if (update.hasMessage()) {
+            languageCode = update.getMessage().getFrom().getLanguageCode();
+        } else {
+            languageCode = "en";
+        }
+        return switch (languageCode) {
+            case "ru" -> Language.RU;
+            case "en" -> Language.EN;
+            default -> Language.EN;
+        };
     }
 }
