@@ -1,8 +1,10 @@
 package ru.mealix.handler;
 
 import org.telegram.telegrambots.bots.DefaultAbsSender;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.mealix.config.Language;
 import ru.mealix.exception.UpdateHandleException;
 import ru.mealix.service.UserService;
 
@@ -36,7 +38,15 @@ public abstract class ChainNode {
         if (next != null) {
             next.handle(update, client);
         } else {
-            throw new UpdateHandleException("Update was not handled");
+            if (update.hasMessage()) {
+                Language language = Language.fromUpdate(update);
+                client.execute(SendMessage
+                        .builder()
+                        .chatId(update.getMessage().getChatId())
+                        .text(language.equals(Language.RU) ? "Что то пошло не так с обработкой обновления" : "Something went wrong with the update handling")
+                        .build()
+                );
+            }
         }
     }
 
