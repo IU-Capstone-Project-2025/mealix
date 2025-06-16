@@ -1,10 +1,16 @@
 package ru.mealix.config;
 
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.mealix.command.Command;
 import ru.mealix.handler.ChainNode;
 
@@ -24,6 +30,33 @@ public class BotCore extends TelegramLongPollingBot {
         this.botAsyncExecutor = botAsyncExecutor;
         this.commands = commands;
         this.handler = handler;
+    }
+
+    @PostConstruct
+    public void init() {
+        try {
+            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+            telegramBotsApi.registerBot(this);
+
+            execute(new SetMyCommands(
+                    commands.get(Language.RU)
+                    .values().stream()
+                    .map(command -> (BotCommand) command)
+                    .toList(),
+                    new BotCommandScopeDefault(), "ru")
+            );
+            execute(new SetMyCommands(
+                    commands.get(Language.EN)
+                            .values().stream()
+                            .map(command -> (BotCommand) command)
+                            .toList(),
+                    new BotCommandScopeDefault(), "en")
+            );
+
+        } catch (TelegramApiException e) {
+            log.error("Error registering commands: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
