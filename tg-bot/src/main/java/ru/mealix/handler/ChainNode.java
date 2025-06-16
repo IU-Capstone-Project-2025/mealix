@@ -3,12 +3,16 @@ package ru.mealix.handler;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.mealix.exception.UpdateHandleException;
 
 public abstract class ChainNode {
     private ChainNode next;
 
     public ChainNode(ChainNode next) {
         this.next = next;
+    }
+
+    public ChainNode() {
     }
 
     public final void handle(Update update, DefaultAbsSender client) throws TelegramApiException {
@@ -27,6 +31,8 @@ public abstract class ChainNode {
     private void next(Update update, DefaultAbsSender client) throws TelegramApiException {
         if (next != null) {
             next.handle(update, client);
+        } else {
+            throw new UpdateHandleException("Update was not handled");
         }
     }
 
