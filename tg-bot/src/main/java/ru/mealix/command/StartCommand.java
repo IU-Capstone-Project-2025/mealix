@@ -12,7 +12,7 @@ public class StartCommand extends Command {
     private final String buttonText;
 
     public StartCommand(Language language) {
-        super("/start", language.equals(Language.RU) ? "Запускает бота" : "Starts the bot");
+        super("/start", language.equals(Language.RU) ? "Старт" : "Start");
         this.messageText = language.equals(Language.RU) ?
                 "Привет! Я Mealix Bot! Вы можете приступить к настройкам в мини-апп" :
                 "Hello! I'm Mealix Bot! You can start the settings in the mini-app";
