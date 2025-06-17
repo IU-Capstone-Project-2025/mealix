@@ -1,0 +1,10 @@
+завтраки - https://www.povarenok.ru/recipes/destiny/5/
+супы - https://www.povarenok.ru/recipes/category/2/
+горячие блюда - https://www.povarenok.ru/recipes/category/6/
+салаты - https://www.povarenok.ru/recipes/category/12/
+десерты - https://www.povarenok.ru/recipes/category/30/
+блюда из мяса - https://www.povarenok.ru/recipes/category/7/
+блюда из рыбы - https://www.povarenok.ru/recipes/category/8/
+блюда из курицы - https://www.povarenok.ru/recipes/category/9/
+каша - https://www.povarenok.ru/recipes/poisk/kasha/?orderby=views
+овсяная каша - https://www.povarenok.ru/recipes/poisk/kasha-ovsyanaya/?orderby=#searchformtop
