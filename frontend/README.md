@@ -4,8 +4,6 @@ This directory contains the frontend application for Mealix, built using a moder
 
 ## Feature-Sliced Design (FSD) Architecture
 
-### Core Principles
-
 ```ruby
 mealix/frontend/src/
 ├── app/
@@ -80,7 +78,7 @@ mealix/frontend/src/
         └── common.ts
 ```
 
-### FSD Layers (from top to bottom / most specific to most generic)
+### FSD Layers
 
 1.  **`app`**:
     *   **Purpose:** Application-level logic and global configuration. Contains global styles, routing, and setup for the entire application.
@@ -139,22 +137,3 @@ Each layer (except `app` and `shared`) is further divided into "slices" based on
     meal/
     ...
 `
-
-### Import Rule
-
-Imports are strictly controlled:
-*   **Inside a slice:** Any import is allowed.
-*   **Between slices of the same layer:** Imports are forbidden (e.g., `features/auth` cannot import from `features/meal-generation`).
-*   **Between different layers:** Only downward imports are allowed (e.g., `features` can import from `entities` or `shared`, but `entities` cannot import from `features`).
-
-### Getting Started
-
-To begin developing, refer to the `src` directory structure and place your code according to the FSD principles outlined above. Each folder within a layer (e.g., `entities/user`) should contain its own `index.ts` file to export its public API, facilitating clean imports.
-
-```typescript
-// Example: src/entities/user/index.ts
-export * from './model';
-export * from './ui';
-// ... other exports
-```
-
