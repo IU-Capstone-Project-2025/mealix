@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.backend.dto.UserDto;
+import ru.backend.exception.NotFoundException;
 import ru.backend.service.UserService;
 
 @RestController
@@ -24,6 +25,16 @@ public class UserEndpoint {
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
         UserDto userDto = userService.getUser(userId);
         return ResponseEntity.ok(userDto);
+    }
+
+    @GetMapping("/isRegistered/{userId}")
+    public ResponseEntity<Boolean> isRegistered(@PathVariable Long userId) {
+        try {
+            userService.getUser(userId);
+            return ResponseEntity.ok(true);
+        } catch (NotFoundException e) {
+            return ResponseEntity.ok(false);
+        }
     }
 
 }
