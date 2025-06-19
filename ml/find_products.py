@@ -1,6 +1,11 @@
 import pandas as pd
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
+import pymorphy3
+import re
+
+morph = pymorphy3.MorphAnalyzer()
+
 
 def find_top_products(product_name, csv_file="data.csv", top_n=3):
     """Args:
@@ -13,27 +18,56 @@ def find_top_products(product_name, csv_file="data.csv", top_n=3):
               calories, proteins, fats, carbohydrates, type, brand, manufacturer, article, composition,
               description, image_url, rating_score, price, category) for a matched product.
               Returns an empty list if no matches are found or an error occurs."""
+    
+    def lemmatize_text(text):
+        if not isinstance(text, str):
+            return ""
+        
+        words = re.findall(r'\w+', text.lower())
+        
+        # Lemmatize each word
+        lemmatized_words = [morph.parse(word)[0].normal_form for word in words]
+        
+        return ' '.join(lemmatized_words)
+
     try:
         df = pd.read_csv(csv_file)
-        # Extract product names from the 'name' column
-        product_names = df['name'].tolist()
         
-        # Find the top matches
-        matches = process.extract(product_name, product_names, scorer=fuzz.partial_ratio, limit=top_n)
-
-        result = []
-        for match in matches:
-            product_match = match[0]
-            product_row = df[df['name'] == product_match].iloc[0]
-            result.append(product_row.tolist())
+        if not {'name', 'type'}.issubset(df.columns):
+            print("CSV file must contain 'name' and 'type' columns")
+            return []
         
-        return result
+        lemmatized_query = lemmatize_text(product_name)
+        
+        matches = []
+        
+        for idx, row in df.iterrows():
+            lemmatized_type = lemmatize_text(str(row['type']))
+            lemmatized_name = lemmatize_text(str(row['name']))
+            
+            # Calculate score for 'type' (higher weight) and 'name' using lemmatized texts
+            type_score = fuzz.partial_ratio(lemmatized_query, lemmatized_type) * 0.6
+            name_score = fuzz.partial_ratio(lemmatized_query, lemmatized_name) * 0.4
+            
+            total_score = type_score + name_score
+            
+            matches.append({
+                'score': total_score,
+                'data': row.tolist()
+            })
+        
+        matches = sorted(matches, key=lambda x: x['score'], reverse=True)
+        
+        # Extract top_n results
+        top_matches = [match['data'] for match in matches[:top_n] if match['score'] > 50]
+        
+        return top_matches
     
     except FileNotFoundError:
-        print(f"Error: The file {csv_file} was not found.")
+        print(f"Error: File '{csv_file}' not found")
         return []
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        print(f"Error occurred: {str(e)}")
         return []
 
 # Test search
@@ -50,9 +84,11 @@ def find_top_products(product_name, csv_file="data.csv", top_n=3):
 #     "брокколи"
 # ]
 
-# for product in test_products:
+# product = input()
+# while product != "стоп":
 #     print(f"\nSearching for: {product}")
 #     results = find_top_products(product)
 #     if results:
 #         print(f"Top 3 matches for '{product}':")
 #         print(results)
+#     product = input()
