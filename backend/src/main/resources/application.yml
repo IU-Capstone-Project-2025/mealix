@@ -1,0 +1,34 @@
+spring:
+    application:
+        name:backend
+    liquibase:
+        enabled: false
+        change-log: classpath:db/changelog/master.xml
+    jpa:
+        hibernate:
+            ddl-auto: create
+        database: postgresql
+        open-in-view: true
+        show-sql: true
+        properties:
+          hibernate.format_sql: true
+    datasource:
+        url: jdbc:postgresql://db:5432/postgresql
+        username: ${DB_USER}
+        password: ${DB_PASS}
+        hikari:
+            maximum-pool-size: 10
+            connection-timeout: 45000
+            auto-commit: true
+
+springdoc:
+    swagger-ui:
+        enabled: true
+        path: /swagger-ui
+    override-with-generic-response: false
+    model-converters:
+        deprecating-converter:
+            enabled: false
+
+ml:
+    url: http://ml:8080
