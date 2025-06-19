@@ -6,7 +6,7 @@ spring:
         change-log: classpath:db/changelog/master.xml
     jpa:
         hibernate:
-            ddl-auto: create
+            ddl-auto: none
         database: postgresql
         open-in-view: true
         show-sql: true
