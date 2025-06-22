@@ -24,8 +24,6 @@ public class MealGenerationEndpoint {
     private final UserService userService;
     private final WebClient mlClient;
 
-    // TODO: implement method with correct data
-
     @PostMapping
     public ResponseEntity<GenerationResponseDto> generateMeals(@RequestBody GenerationRequestDto generationDto) {
         UserDto user = userService.getUser(generationDto.userId());
