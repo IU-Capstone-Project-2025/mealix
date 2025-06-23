@@ -29,10 +29,11 @@ public class MiniAppUtil {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
 
-        rowInline.add(InlineKeyboardButton.builder()
-                .text(text)
-                .webApp(new WebAppInfo(miniAppHostStatic + url))
-                .build());
+        InlineKeyboardButton webApp = new InlineKeyboardButton();
+        webApp.setText(text);
+        webApp.setUrl(miniAppHostStatic + url);
+
+        rowInline.add(webApp);
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
 
