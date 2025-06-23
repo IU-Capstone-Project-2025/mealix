@@ -40,9 +40,9 @@ public class BotCore extends TelegramLongPollingBot {
 
             execute(new SetMyCommands(
                     commands.get(Language.RU)
-                    .values().stream()
-                    .map(command -> (BotCommand) command)
-                    .toList(),
+                            .values().stream()
+                            .map(command -> (BotCommand) command)
+                            .toList(),
                     new BotCommandScopeDefault(), "ru")
             );
             execute(new SetMyCommands(

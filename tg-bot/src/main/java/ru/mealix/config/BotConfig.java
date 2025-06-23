@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.mealix.command.Command;
+import ru.mealix.command.GenerationCommand;
 import ru.mealix.command.SettingsCommand;
 import ru.mealix.command.StartCommand;
 import ru.mealix.handler.ChainNode;
@@ -40,10 +41,12 @@ public class BotConfig {
         ConcurrentHashMap<String, Command> commandsRu = new ConcurrentHashMap<>();
         commandsRu.put("/start", new StartCommand(Language.RU));
         commandsRu.put("/settings", new SettingsCommand(Language.RU));
+        commandsRu.put("/generate", new GenerationCommand(Language.RU));
 
         ConcurrentHashMap<String, Command> commandsEn = new ConcurrentHashMap<>();
         commandsEn.put("/start", new StartCommand(Language.EN));
         commandsEn.put("/settings", new SettingsCommand(Language.EN));
+        commandsEn.put("/generate", new GenerationCommand(Language.EN));
 
         commands.put(Language.RU, commandsRu);
         commands.put(Language.EN, commandsEn);
