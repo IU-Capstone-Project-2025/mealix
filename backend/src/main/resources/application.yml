@@ -31,4 +31,4 @@ springdoc:
             enabled: false
 
 ml:
-    url: http://ml:8080
+    url: http://ml:8080/menu
