@@ -11,6 +11,10 @@ import ru.backend.service.UserService;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://mealix.vercel.app"
+})
 public class UserEndpoint {
 
     private final UserService userService;
