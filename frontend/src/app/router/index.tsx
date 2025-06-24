@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-ro
 import { getLocalStorageItem, setLocalStorageItem } from '@shared/lib/utils/local-storage';
 import { HomePage } from '@pages/home';
 import { NewUserPage } from '@pages/new-user';
+import { GenerateMealPage } from '@pages/generate-meal';
 
 const AuthWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -44,6 +45,7 @@ export const AppRouter: React.FC = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/newuser" element={<NewUserPage />} />
+          <Route path="/generate-meal" element={<GenerateMealPage />} />
           <Route path="*" element={<h1>404: Not Found<br />Пожалуйста, переходите на сайт через Telegram-бота</h1>} />
         </Routes>
       </AuthWrapper>
