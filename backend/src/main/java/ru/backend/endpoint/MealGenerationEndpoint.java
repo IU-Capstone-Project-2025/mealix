@@ -31,8 +31,9 @@ public class MealGenerationEndpoint {
                 .post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(Map.of(
-                        "user", user,
-                        "generation", generationDto
+                    "allergies", user.preferences().allergies() + "\n" + user.preferences().dietaryRestrictions(),
+                    "general_prefs", user.preferences().favoriteCuisines(),
+                    "today_prefs", generationDto.text()
                 ))
                 .retrieve()
                 .toEntity(GenerationResponseDto.class)
