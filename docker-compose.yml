@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: postgresql
+    volumes:
+      - app_data:/var/lib/postgresql/data
+    ports:
+      - "4000:5432"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  liquibase:
+    image: liquibase/liquibase:4.24.0
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .backend/src/main/resources/db/changelog:/liquibase/changelog
+    command:
+      - --searchPath=/liquibase/changelog
+      - --changelog-file=master.xml
+      - --driver=org.postgresql.Driver
+      - --url=jdbc:postgresql://db:5432/postgresql
+      - --username=${DB_USER}
+      - --password=${DB_PASS}
+      - update
+    networks:
+      - app-network
+    restart: "no"
+
+  backend:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  bot:
+    build: ./tg-bot
+    env_file:
+      - .env
+    ports:
+      - "8081:8081"
+    networks:
+      - app-network
+
+  ml:
+    build: ./ml # path to Dockerfile in ml
+    env_file:
+      - .env
+    ports:
+      - "8082:8082"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  app_data:
