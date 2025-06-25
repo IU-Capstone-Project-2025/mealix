@@ -7,14 +7,12 @@ import { saveUserProfile } from '@entities/user/api/userApi';
 export const SaveUserProfileForm: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const initialUserId = searchParams.get('user_id') as UserId;
+  const initialUserId = Number(searchParams.get('user_id'));
 
   const [name, setName] = useState<string>('');
   const [allergies, setAllergies] = useState<string>('');
   const [dietaryRestrictions, setDietaryRestrictions] = useState<string>('');
   const [favoriteCuisines, setFavoriteCuisines] = useState<string>('');
-  const [cookingTime, setCookingTime] = useState<string>('');
-  const [period, setPeriod] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -24,7 +22,7 @@ export const SaveUserProfileForm: React.FC = () => {
     setError(null);
     setSuccess(false);
 
-    if (!initialUserId) {
+    if (!initialUserId || isNaN(initialUserId)) {
       setError("User ID not found in URL. Please open the app from Telegram.");
       return;
     }
@@ -99,26 +97,6 @@ export const SaveUserProfileForm: React.FC = () => {
           value={favoriteCuisines}
           onChange={(e) => setFavoriteCuisines(e.target.value)}
           placeholder="e.g., Italian, Mexican, Asian"
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="cookingTime">Preferred Cooking Time (e.g., 30-60 min):</label>
-        <input
-          type="text"
-          id="cookingTime"
-          value={cookingTime}
-          onChange={(e) => setCookingTime(e.target.value)}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="period">Meal Plan Period (e.g., day, 3 days, week):</label>
-        <input
-          type="text"
-          id="period"
-          value={period}
-          onChange={(e) => setPeriod(e.target.value)}
-          required
         />
       </div>
       <button type="submit" disabled={loading}>Save Preferences</button>

@@ -1,4 +1,4 @@
-export type UserId = string;
+export type UserId = number;
 
 export interface UserPreferences {
   allergies: string[];

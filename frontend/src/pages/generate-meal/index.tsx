@@ -1,23 +1,40 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useGenerateMealPlan } from '@features/generate-meal-plan/model/useGenerateMealPlan';
 
 export const GenerateMealPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const period = Number(searchParams.get('period')) || 1;
-  const userId = Number(localStorage.getItem('user_id')) || 0;
+  const userIdRaw = localStorage.getItem('user_id');
+  const userId = userIdRaw ? Number(userIdRaw) : 0;
   const { generate, loading, data, error } = useGenerateMealPlan();
+  const [text, setText] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
-  useEffect(() => {
-    generate({ userId, period, text: '' });
-    // eslint-disable-next-line
-  }, [userId, period]);
+  const handleGenerate = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    generate({ userId, period, text });
+  };
 
   return (
     <div>
       <h1>Генерация плана на {period} {period === 1 ? 'день' : 'дня'}</h1>
-      {loading && <p>Генерируется...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <form onSubmit={handleGenerate} style={{ marginBottom: 24 }}>
+        <label htmlFor="prefs">Ваши пожелания (опционально):</label>
+        <textarea
+          id="prefs"
+          value={text}
+          onChange={e => setText(e.target.value)}
+          rows={3}
+          style={{ width: '100%', marginBottom: 12 }}
+          placeholder="Например: Хочу что-то легкое, без мяса, люблю итальянскую кухню..."
+        />
+        <button type="submit" disabled={loading || !userId}>
+          {loading ? 'Генерируется...' : 'Сгенерировать'}
+        </button>
+      </form>
+      {submitted && error && <p style={{ color: 'red' }}>{error}</p>}
       {data && (
         <div>
           {data.days.map((day, i) => (

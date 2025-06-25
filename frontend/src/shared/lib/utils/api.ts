@@ -12,7 +12,9 @@ export async function apiPOST<T, R = any>(endpoint: string, body: T): Promise<R>
         throw new Error(errorText || 'API error');
       }
       
-      return response.json() as Promise<R>;
+      const text = await response.text();
+      if (!text) return {} as R;
+      return JSON.parse(text) as R;
 }
 
 // export async function apiGET<T>(endpoint: string) {
