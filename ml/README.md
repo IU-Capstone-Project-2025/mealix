@@ -15,51 +15,52 @@ Mealix is an AI-powered FastAPI service that generates personalized daily meal p
 | **pymorphy2**     | Russian language morphological analyzer      |
 | **rapidfuzz**     | Fast fuzzy string matching                   |
 
-
-- fastapi-app/
+```
+fastapi-app/
 ├── app/
-│ ├──  _pycache_/
-│ │ ├── _init_.cpython-310.pyc
-│ │ ├── main.cpython-310.pyc
-│ ├── clients/
-│ │ ├── _init_.py
-│ │ ├── yandex_gpt.py
-│ │ ├── _pycache_/
-│ │ │ ├── _init_.cpython-310.pyc
-│ │ │ ├── yandex.gpt_cpython-310.pyc
-│ ├── core/
-│ │ ├── _init_.py
-│ │ ├── settings.py
-│ │ ├── _pycache_/
-│ │ │ ├── _init_.cpython-310.pyc
-│ │ │ ├── settings.cpython-310.pyc
-│ ├── services/
-│ │ ├── _pycache_/ ....
-│ │ ├── _init_.py
-│ │ ├── dish_selector.py
-│ │ ├── menu_builder.py
-│ │ ├── product_matcher.py
-│ │ ├── rag_search.py
-│ └── main.py/
-│ └── _init_.py/
+│   ├── __pycache__/
+│   │   ├── __init__.cpython-310.pyc
+│   │   └── main.cpython-310.pyc
+│   ├── clients/
+│   │   ├── __init__.py
+│   │   └── yandex_gpt.py
+│   │   ├── __pycache__/
+│   │   │   ├── __init__.cpython-310.pyc
+│   │   │   └── yandex_gpt.cpython-310.pyc
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── settings.py
+│   │   ├── __pycache__/
+│   │   │   ├── __init__.cpython-310.pyc
+│   │   │   └── settings.cpython-310.pyc
+│   ├── services/
+│   │   ├── __pycache__/
+│   │   ├── __init__.py
+│   │   ├── dish_selector.py
+│   │   ├── menu_builder.py
+│   │   ├── product_matcher.py
+│   │   └── rag_search.py
+│   ├── main.py
+│   └── __init__.py
 ├── datasets/
-│ │ ├── data.csv
-│ │ ├── recipes.csv
+│   ├── data.csv
+│   └── recipes.csv
 ├── info/
-│ │ ├── allergies.txt
-│ │ ├── general_prefs.txt
-│ │ ├── today_prefs.txt
+│   ├── allergies.txt
+│   ├── general_prefs.txt
+│   └── today_prefs.txt
 ├── rag_data/
-│ │ ├── rag_embeddings.npy
-│ │ ├── rag_ids.npy
-│ │ ├── rag_texts.txt
-├── requirements.txt
-- .env
-- build_csv.py
-- Dockerfile
-- find_products
-- generate_menu.py
-- README.md
+│   ├── rag_embeddings.npy
+│   ├── rag_ids.npy
+│   └── rag_texts.txt
+└── requirements.txt
+.env
+build_csv.py
+Dockerfile
+find_products.py
+generate_menu.py
+README.md
+```
 
 ## Getting Started (Local)
 

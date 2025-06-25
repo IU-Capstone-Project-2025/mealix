@@ -11,7 +11,7 @@ from app.core.settings import settings
 
 
 _morph = pymorphy2.MorphAnalyzer()
-_SCORE_THRESHOLD = 50.0
+_SCORE_THRESHOLD = 30.0
 
 
 def _lemmatize(text: str) -> str:
@@ -22,12 +22,11 @@ def _lemmatize(text: str) -> str:
 def _search_catalog(query: str,
                     df: pd.DataFrame,
                     top_n: int = 1) -> List[pd.Series]:
-    q_lem = _lemmatize(query)
     scores: List[tuple[float, pd.Series]] = []
 
     for _, row in df.iterrows():
-        type_score = fuzz.partial_ratio(q_lem, _lemmatize(row.get("type", ""))) * 0.6
-        name_score = fuzz.partial_ratio(q_lem, _lemmatize(row.get("name", ""))) * 0.4
+        type_score = fuzz.WRatio(query, row.get("type", ""))
+        name_score = fuzz.WRatio(query, row.get("name", ""))
         total = type_score + name_score
         if total >= _SCORE_THRESHOLD:
             scores.append((total, row))
