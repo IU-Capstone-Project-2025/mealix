@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserId, UserPreferences, UserProfile } from '@entities/user/model/types';
+import { UserPreferences, UserProfile } from '@entities/user/model/types';
 import { setLocalStorageItem } from '@shared/lib/utils/local-storage';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { saveUserProfile } from '@entities/user/api/userApi';

@@ -1,8 +1,6 @@
 import { UserProfile } from "../model/types";
 import { apiPOST } from "@shared/lib/utils/api";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export interface SaveUserProfileResponse {
   success: boolean;
   data: UserProfile;
