@@ -27,7 +27,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - .backend/src/main/resources/db/changelog:/liquibase/changelog
+      - ./backend/src/main/resources/db/changelog:/liquibase/changelog
     command:
       - --searchPath=/liquibase/changelog
       - --changelog-file=master.xml
@@ -62,7 +62,7 @@ services:
       - app-network
 
   ml:
-    build: ./ml/fastapi-app
+    build: ./ml
     env_file:
       - .env
     ports:

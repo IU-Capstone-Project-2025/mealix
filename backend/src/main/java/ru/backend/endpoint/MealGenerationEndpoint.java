@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestClient;
+import ru.backend.dto.DayMealDto;
 import ru.backend.dto.GenerationRequestDto;
 import ru.backend.dto.GenerationResponseDto;
 import ru.backend.dto.UserDto;
@@ -23,22 +24,21 @@ import java.util.Objects;
 public class MealGenerationEndpoint {
 
     private final UserService userService;
-    private final WebClient mlClient;
+    private final RestClient mlClient;
 
     @PostMapping
-    public ResponseEntity<GenerationResponseDto> generateMeals(@RequestBody GenerationRequestDto generationDto) {
+    public ResponseEntity<DayMealDto> generateMeals(@RequestBody GenerationRequestDto generationDto) {
         UserDto user = userService.getUser(generationDto.userId());
-        GenerationResponseDto response = Objects.requireNonNull(mlClient
+        DayMealDto response = Objects.requireNonNull(mlClient
                 .post()
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(Map.of(
-                    "allergies", user.preferences().allergies() + "\n" + user.preferences().dietaryRestrictions(),
-                    "general_prefs", user.preferences().favoriteCuisines(),
+                .body(Map.of(
+                    "allergies", String.join(", ", user.preferences().allergies()) + "\n" + String.join(", ", user.preferences().dietaryRestrictions()),
+                    "general_prefs", String.join(", ", user.preferences().favoriteCuisines()),
                     "today_prefs", generationDto.text()
                 ))
                 .retrieve()
-                .toEntity(GenerationResponseDto.class)
-                .block()).getBody();
+                .toEntity(DayMealDto.class)).getBody();
         return ResponseEntity.ok(response);
     }
 
