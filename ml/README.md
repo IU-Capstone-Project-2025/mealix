@@ -15,7 +15,7 @@ Mealix is an AI-powered FastAPI service that generates personalized daily meal p
 | **pymorphy2**     | Russian language morphological analyzer      |
 | **rapidfuzz**     | Fast fuzzy string matching                   |
 
-
+```
 fastapi-app/
 ├── app/
 │   ├── __pycache__/
@@ -60,6 +60,7 @@ Dockerfile
 find_products.py
 generate_menu.py
 README.md
+```
 
 ## Getting Started (Local)
 
