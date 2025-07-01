@@ -1,0 +1,39 @@
+.ingredientList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ingredientCard {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 8px;
+  width: 180px;
+  background: #fafbfc;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  display: inline-block;
+  vertical-align: top;
+}
+
+.ingredientName {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.ingredientAmount {
+  font-size: 13px;
+  color: #555;
+}
+
+.ingredientProduct {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.ingredientLink {
+  font-size: 13px;
+  color: #1976d2;
+  text-decoration: underline;
+} 
