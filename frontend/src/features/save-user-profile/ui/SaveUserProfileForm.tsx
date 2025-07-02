@@ -43,13 +43,10 @@ export const SaveUserProfileForm: React.FC = () => {
     try {
       setLocalStorageItem('user_profile', JSON.stringify(userProfile));
       const result = await saveUserProfile(userProfile);
-      if (result.success) {
-        setSuccess(true);
-        alert("Profile saved successfully!");
-        navigate('/');
-      } else {
-        setError(result.message || 'Error saving profile');
-      }
+      console.log(result.data)
+      setSuccess(true);
+      alert("Profile saved successfully!");
+      navigate('/');
     } catch (e) {
       setError((e as Error).message);
     } finally {
