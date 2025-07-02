@@ -3,12 +3,14 @@ package ru.backend.dto;
 import jakarta.validation.constraints.NotNull;
 import ru.backend.model.User;
 
+import java.io.Serializable;
+
 public record UserDto (
         @NotNull
     Long userId,
     String name,
     PreferencesDto preferences
-) implements ToEntity<User> {
+) implements ToEntity<User>, Serializable {
 
     public static UserDto fromEntity(User user) {
         return new UserDto(

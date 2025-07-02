@@ -26,6 +26,7 @@ public class MealGenerationEndpoint {
     private final UserService userService;
     private final RestClient mlClient;
 
+
     @PostMapping
     public ResponseEntity<DayMealDto> generateMeals(@RequestBody GenerationRequestDto generationDto) {
         UserDto user = userService.getUser(generationDto.userId());
@@ -33,7 +34,7 @@ public class MealGenerationEndpoint {
                 .post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Map.of(
-                    "allergies", String.join(", ", user.preferences().allergies()) + "\n" + String.join(", ", user.preferences().dietaryRestrictions()),
+                    "allergies", String.join(", ", user.preferences().allergies()) + ", " + String.join(", ", user.preferences().dietaryRestrictions()),
                     "general_prefs", String.join(", ", user.preferences().favoriteCuisines()),
                     "today_prefs", generationDto.text()
                 ))
