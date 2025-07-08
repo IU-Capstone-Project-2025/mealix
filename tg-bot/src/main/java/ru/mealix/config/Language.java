@@ -14,6 +14,11 @@ public enum Language {
         this.code = code;
     }
 
+    /**
+     * Returns the language associated with the given update object.
+     * @param update object that contains the information about the update
+     * @return language associated with the given update object
+     */
     public static Language fromUpdate(Update update) {
         String languageCode;
         if (update.hasMessage()) {

@@ -23,7 +23,12 @@ public class BotConfig {
     private final BotProperties botProperties;
     private final UserService userService;
 
-
+    /**
+     * Bean for getting bot token from application.properties.
+     * You can define it by "bot.token" property.
+     * If token is null or empty, IllegalStateException will be thrown.
+     * @return bot token
+     */
     @Bean(name = "botToken")
     public String botToken() {
         String token = botProperties.getToken();
@@ -35,6 +40,10 @@ public class BotConfig {
         return token;
     }
 
+    /**
+     * Returns bean with commands for all languages.
+     * @return bean with commands
+     */
     @Bean
     public ConcurrentHashMap<Language, ConcurrentHashMap<String, Command>> commands() {
         ConcurrentHashMap<Language, ConcurrentHashMap<String, Command>> commands = new ConcurrentHashMap<>();
@@ -53,6 +62,11 @@ public class BotConfig {
         return commands;
     }
 
+    /**
+     * Creates bean with chain of responsibility for handling updates.
+     * This bean is used in {@link BotCore} for handling updates.
+     * @return handler for updates
+     */
     @Bean
     public ChainNode handler() {
         return new NewUserStateChainNode(userService, commands())

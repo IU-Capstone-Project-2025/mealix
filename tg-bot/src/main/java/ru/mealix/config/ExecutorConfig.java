@@ -19,6 +19,11 @@ public class ExecutorConfig {
     @Value("${bot.queueCapacity}")
     private int queueCapacity;
 
+    /**
+     * Creates thread pool executor for handling telegram bot updates asynchronously.
+     *
+     * @return created executor
+     */
     @Bean(name = "botAsyncExecutor")
     public Executor asyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
