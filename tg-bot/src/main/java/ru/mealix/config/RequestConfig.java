@@ -27,12 +27,4 @@ public class RequestConfig {
         return RestClient.create(backendHost + "/user");
     }
 
-    private ExchangeFilterFunction logRequest() {
-        return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
-            log.info("Sending request: {} {}", clientRequest.method(), clientRequest.url());
-            return Mono.just(clientRequest);
-        });
-    }
-
-
 }
