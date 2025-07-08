@@ -10,6 +10,9 @@ import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility class for work with Telegram Mini Apps
+ */
 @Component
 public class MiniAppUtil {
 
@@ -23,7 +26,13 @@ public class MiniAppUtil {
         miniAppHostStatic = miniAppHost;
     }
 
-
+    /**
+     * Generates inline keyboard markup for button with mini app url.
+     *
+     * @param url    mini app url
+     * @param text   button text
+     * @return inline keyboard markup
+     */
     public static InlineKeyboardMarkup getMiniAppButton(String url, String text) {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();

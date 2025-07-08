@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
+/**
+ * Main class for bot. It's extends {@link TelegramLongPollingBot} and add some features like
+ * handling updates in separate thread pool and handling commands in simple chain of responsibility pattern.
+ */
 @Service
 @Slf4j
 public class BotCore extends TelegramLongPollingBot {
@@ -32,6 +36,9 @@ public class BotCore extends TelegramLongPollingBot {
         this.handler = handler;
     }
 
+    /**
+     * Simple init method for telegram bot. It register bot in TelegramBotsApi and set commands for bot.
+     */
     @PostConstruct
     public void init() {
         try {
