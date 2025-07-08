@@ -77,7 +77,7 @@ class MealGenerationEndpointTest {
                 "Healthy breakfast",
                 List.of(new IngredientDto(
                         "Oats",
-                        1,
+                        "1",
                         "100g",
                         "Oatmeal",
                         "Healthy breakfast"
