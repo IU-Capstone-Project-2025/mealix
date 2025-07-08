@@ -2,7 +2,7 @@ name: Deploy to VPS
 
 on:
   push:
-    branches: [deploy]
+    branches: [main]
 
 jobs:
   deploy:
@@ -16,11 +16,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /root
-            if [ ! -d collaborative_editor ]; then
-              git clone https://github.com/IU-Capstone-Project-2025/mealix.git
+            cd /home/deployer/mealix
+            if [ ! -d .git ]; then
+              git clone git@github.com:IU-Capstone-Project-2025/mealix.git .
             fi
-            cd mealix
             git pull origin main
             docker compose down
             docker compose up --build -d
