@@ -1,5 +1,5 @@
 import logging
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import (
     ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters
 )
@@ -62,7 +62,7 @@ def get_error_text(lang):
 def miniapp_keyboard(path, lang):
     url = get_miniapp_url(path)
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton(get_button_text(lang), url=url)]
+        [InlineKeyboardButton(get_button_text(lang), web_app=WebAppInfo(url=url))]
     ])
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
