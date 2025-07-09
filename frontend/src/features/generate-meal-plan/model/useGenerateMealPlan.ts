@@ -14,6 +14,7 @@ export function useGenerateMealPlan() {
     setData(null);
     try {
       const result = await apiPOST<GenerateMealPlanRequest, MealPlanResponse>('/meals', req);
+      console.log(result)
       setData(result);
     } catch (e) {
       setError((e as Error).message);

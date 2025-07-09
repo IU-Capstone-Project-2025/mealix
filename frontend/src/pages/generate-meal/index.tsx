@@ -15,6 +15,9 @@ export const GenerateMealPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [articleImageMap, setArticleImageMap] = useState<ArticleImageMap>({});
 
+  console.log(import.meta.env.VITE_API_URL)
+  console.log(articleImageMap[0]);
+
   useEffect(() => {
     loadArticleImageMap().then(setArticleImageMap);
   }, []);
@@ -23,6 +26,7 @@ export const GenerateMealPage: React.FC = () => {
     e.preventDefault();
     setSubmitted(true);
     generate({ userId, period, text });
+    console.log('кнопка нажата')
   };
 
   return (

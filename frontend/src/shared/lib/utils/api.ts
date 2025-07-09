@@ -1,12 +1,17 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function apiPOST<T, R = any>(endpoint: string, body: T): Promise<R> {
-    const response = await fetch(API_URL + endpoint, {
+    console.log('request')  
+    console.log(API_URL + endpoint)
+  const response = await fetch(API_URL + endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-      
+  console.log('ok')
+
+
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText || 'API error');
