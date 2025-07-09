@@ -1,24 +1,10 @@
-FROM maven:3.8.8-eclipse-temurin-21 AS builder
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY pom.xml .
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./src ./src
-RUN mvn clean package -DskipTests
+COPY . .
 
-# Финальный образ
-FROM eclipse-temurin:21-jdk-alpine-3.21
-
-WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
-
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
-
-#For locla build
-
-#FROM eclipse-temurin:21-jdk-alpine-3.21
-#ARG JAR_FILE=target/*.jar
-#COPY ${JAR_FILE} app.jar
-#ENTRYPOINT ["java", "-jar", "/app.jar"]
+CMD ["python", "main.py"] 
