@@ -26,6 +26,9 @@ class MenuRequest(BaseModel):
     allergies: str = ""
     general_prefs: str = ""
     today_prefs: str = ""
+    budget: str = ""
+    nutrition_goals: str = ""
+
 
 @app.post("/menu")
 def generate_menu(payload: MenuRequest) -> Dict[str, Any]:
@@ -39,7 +42,10 @@ def generate_menu(payload: MenuRequest) -> Dict[str, Any]:
             allergies=payload.allergies,
             general_prefs=payload.general_prefs,
             today_prefs=payload.today_prefs,
+            budget=payload.budget,
+            nutrition_goals=payload.nutrition_goals,
         )
+
         print("🍽 Выбраны блюда:", dishes)
 
         print("🔧 Строим меню через build_menu...")
