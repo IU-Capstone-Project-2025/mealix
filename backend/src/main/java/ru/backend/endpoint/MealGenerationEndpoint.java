@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 import ru.backend.dto.DayMealDto;
 import ru.backend.dto.GenerationRequestDto;
-import ru.backend.dto.GenerationResponseDto;
 import ru.backend.dto.UserDto;
 import ru.backend.service.UserService;
 
@@ -36,7 +35,9 @@ public class MealGenerationEndpoint {
                 .body(Map.of(
                     "allergies", String.join(", ", user.preferences().allergies()) + ", " + String.join(", ", user.preferences().dietaryRestrictions()),
                     "general_prefs", String.join(", ", user.preferences().favoriteCuisines()),
-                    "today_prefs", generationDto.text()
+                    "today_prefs", generationDto.text(),
+                    "budget", generationDto.budget(),
+                    "nutrition_goals", generationDto.nutrition_goals()
                 ))
                 .retrieve()
                 .toEntity(DayMealDto.class)).getBody();
