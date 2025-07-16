@@ -60,7 +60,7 @@ class MealGenerationEndpointTest {
     @Test
     void generateMeals_validRequest_returnsDayMealDto() throws Exception {
         Long userId = 1L;
-        GenerationRequestDto requestDto = new GenerationRequestDto(userId, 1, "Healthy meals");
+        GenerationRequestDto requestDto = new GenerationRequestDto(userId, 1, "Healthy meals", "", "");
 
         UserDto userDto = new UserDto(
                 userId,
