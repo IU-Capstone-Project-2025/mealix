@@ -18,6 +18,12 @@ public class RequestConfig {
     @Value("${ml.url}")
     private String mlUrl;
 
+    /**
+     * Create {@link RestClient} bean which can be used for calling machine learning service.
+     * Timeout for connection and read is 5 minutes.
+     *
+     * @return {@link RestClient} instance
+     */
     @Bean
     public RestClient mlClient() {
         return RestClient.builder()
