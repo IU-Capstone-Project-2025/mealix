@@ -14,6 +14,11 @@ export const GenerateMealPage: React.FC = () => {
   const [text, setText] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [articleImageMap, setArticleImageMap] = useState<ArticleImageMap>({});
+  const [budget, setBudget] = useState('');
+  const [nutritionGoals, setNutritionGoals] = useState('');
+
+  console.log(import.meta.env.VITE_API_URL)
+  console.log(articleImageMap[0]);
 
   useEffect(() => {
     loadArticleImageMap().then(setArticleImageMap);
@@ -22,7 +27,8 @@ export const GenerateMealPage: React.FC = () => {
   const handleGenerate = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    generate({ userId, period, text });
+    generate({ userId, period, text, budget, nutrition_goals: nutritionGoals });
+    console.log('кнопка нажата')
   };
 
   return (
@@ -37,6 +43,24 @@ export const GenerateMealPage: React.FC = () => {
           rows={3}
           style={{ width: '100%', marginBottom: 12 }}
           placeholder="Например: Хочу что-то легкое, без мяса, люблю итальянскую кухню..."
+        />
+        <label htmlFor="budget">Бюджет (опционально):</label>
+        <input
+          id="budget"
+          type="text"
+          value={budget}
+          onChange={e => setBudget(e.target.value)}
+          style={{ width: '100%', marginBottom: 12 }}
+          placeholder="Например: до 1000 рублей на день"
+        />
+        <label htmlFor="nutritionGoals">КБЖУ (опционально):</label>
+        <input
+          id="nutritionGoals"
+          type="text"
+          value={nutritionGoals}
+          onChange={e => setNutritionGoals(e.target.value)}
+          style={{ width: '100%', marginBottom: 12 }}
+          placeholder="Например: 2000 ккал, 100г белка, 70г жиров, 250г углеводов"
         />
         <button type="submit" disabled={loading || !userId}>
           {loading ? 'Генерируется...' : 'Сгенерировать'}
