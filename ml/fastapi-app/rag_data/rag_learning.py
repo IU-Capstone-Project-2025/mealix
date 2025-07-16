@@ -1,65 +1,69 @@
-
 from pathlib import Path
-import argparse
-from typing import List
 
-import pandas as pd
 import numpy as np
-from tqdm.auto import tqdm
+import pandas as pd
+import faiss
 from sentence_transformers import SentenceTransformer
 
-
-def build_text(row: pd.Series) -> str:
-    parts: List[str] = [
-        str(row["name"]),
-        f"Категория: {row['category']}",
-        f"Ингредиенты: {row['ingredients']}",
-        f"Инструкции: {row['instructions']}",
-        f"Пищевая ценность: {row['nutrition']}",
-    ]
-    return "\n".join(parts)
-
-
-def main(csv_path: Path, out_dir: Path, model_name: str) -> None:
-    print("читаем CSV")
+def rebuild_rag(
+    csv_path: Path,
+    rag_dir: Path,
+    model_name: str = "paraphrase-multilingual-MiniLM-L12-v2"
+):
     df = pd.read_csv(csv_path)
+    texts = (
+        df["name"].fillna("").astype(str)
+        + ". " + df["category"].fillna("").astype(str)
+        + ". Ингредиенты: " + df["ingredients"].fillna("").astype(str)
+        + ". Приготовление: " + df["instructions"].fillna("").astype(str)
+    ).tolist()
 
-    print("собираем тексты")
-    texts = [build_text(row) for _, row in df.iterrows()]
-    ids = df["id"].to_numpy()
+    ids = df["id"].values
+    rag_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"загружаем SentenceTransformer: {model_name}")
-    model = SentenceTransformer(model_name)
+    with open(rag_dir / "rag_texts.txt", "w", encoding="utf-8") as f:
+        for txt in texts:
+            f.write(txt.replace("\n", " ") + "\n")
 
-    print("кодируем эмбеддинги")
-    embeddings = model.encode(
+    print("[RAG BUILD] Загружаем модель…")
+    encoder = SentenceTransformer(model_name)
+    print("[RAG BUILD] Кодирование эмбеддингов…")
+    embeddings = encoder.encode(
         texts,
-        batch_size=64,
         convert_to_numpy=True,
         show_progress_bar=True,
+        batch_size=32
     )
+    faiss.normalize_L2(embeddings)
+    np.save(rag_dir / "rag_ids.npy", ids)
+    np.save(rag_dir / "rag_embeddings.npy", embeddings)
 
-    out_dir.mkdir(parents=True, exist_ok=True)
-    np.save(out_dir / "rag_embeddings.npy", embeddings)
-    np.save(out_dir / "rag_ids.npy", ids)
-    with open(out_dir / "rag_texts.txt", "w", encoding="utf-8") as f:
-        for t in texts:
-            f.write(t.replace("\n", " ") + "\n")
-
-    print(f"cохранено: {len(ids)} рецептов → {out_dir.resolve()}")
-
+    print(f"[RAG BUILD] Сохранено {len(ids)} записей в {rag_dir}")
 
 if __name__ == "__main__":
+    import argparse
+
     parser = argparse.ArgumentParser(
-        description="Сгенерировать файлы rag_embeddings.npy, rag_ids.npy, rag_texts.txt"
+        description="Rebuild RAG index data from recipes.csv"
     )
-    parser.add_argument("--csv", required=True, help="Путь к recipes.csv")
-    parser.add_argument("--out", default="rag_data", help="Выходная директория")
+    parser.add_argument(
+        "--csv",
+        type=Path,
+        default=Path("data/recipes.csv"),
+        help="Путь к recipes.csv"
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=Path("rag_data"),
+        help="Папка для rag_texts.txt, rag_ids.npy, rag_embeddings.npy"
+    )
     parser.add_argument(
         "--model",
+        type=str,
         default="paraphrase-multilingual-MiniLM-L12-v2",
-        help="SentenceTransformer model id",
+        help="Имя модели SentenceTransformer"
     )
     args = parser.parse_args()
 
-    main(Path(args.csv), Path(args.out), args.model)
+    rebuild_rag(args.csv, args.out, args.model)
