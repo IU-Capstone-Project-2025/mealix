@@ -3,6 +3,7 @@ import { UserPreferences, UserProfile } from '@entities/user/model/types';
 import { setLocalStorageItem } from '@shared/lib/utils/local-storage';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { saveUserProfile } from '@entities/user/api/userApi';
+import styles from './SaveUserProfileForm.module.css';
 
 export const SaveUserProfileForm: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -23,7 +24,7 @@ export const SaveUserProfileForm: React.FC = () => {
     setSuccess(false);
 
     if (!initialUserId || isNaN(initialUserId)) {
-      setError("User ID not found in URL. Please open the app from Telegram.");
+      setError("ID пользователя не найден в URL. Пожалуйста, откройте приложение из Telegram.");
       return;
     }
 
@@ -42,10 +43,9 @@ export const SaveUserProfileForm: React.FC = () => {
     setLoading(true);
     try {
       setLocalStorageItem('user_profile', JSON.stringify(userProfile));
-      const result = await saveUserProfile(userProfile);
-      console.log(result.data)
+      await saveUserProfile(userProfile);
       setSuccess(true);
-      alert("Profile saved successfully!");
+      alert("Профиль успешно сохранён!");
       navigate('/');
     } catch (e) {
       setError((e as Error).message);
@@ -55,50 +55,51 @@ export const SaveUserProfileForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={styles['blur-bg-form']}>
       <div className="form-group">
-        <label htmlFor="name">Your Name:</label>
+        <label htmlFor="name">Ваше имя:</label>
         <input
           type="text"
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          placeholder="Например: Иван"
         />
       </div>
       <div className="form-group">
-        <label htmlFor="allergies">Allergies (comma-separated):</label>
+        <label htmlFor="allergies">Аллергии (через запятую):</label>
         <input
           type="text"
           id="allergies"
           value={allergies}
           onChange={(e) => setAllergies(e.target.value)}
-          placeholder="e.g., peanuts, dairy"
+          placeholder="Например: арахис, молоко"
         />
       </div>
       <div className="form-group">
-        <label htmlFor="dietaryRestrictions">Dietary Restrictions (comma-separated):</label>
+        <label htmlFor="dietaryRestrictions">Пищевые ограничения (через запятую):</label>
         <input
           type="text"
           id="dietaryRestrictions"
           value={dietaryRestrictions}
           onChange={(e) => setDietaryRestrictions(e.target.value)}
-          placeholder="e.g., vegetarian, vegan, gluten-free"
+          placeholder="Например: вегетарианец, безглютеновая диета"
         />
       </div>
       <div className="form-group">
-        <label htmlFor="favoriteCuisines">Favorite Cuisines (comma-separated):</label>
+        <label htmlFor="favoriteCuisines">Любимые кухни (через запятую):</label>
         <input
           type="text"
           id="favoriteCuisines"
           value={favoriteCuisines}
           onChange={(e) => setFavoriteCuisines(e.target.value)}
-          placeholder="e.g., Italian, Mexican, Asian"
+          placeholder="Например: итальянская, мексиканская, азиатская"
         />
       </div>
-      <button type="submit" disabled={loading}>Save Preferences</button>
+      <button type="submit" disabled={loading}>Сохранить профиль</button>
       {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>}
-      {success && <div style={{ color: 'green', marginTop: 10 }}>Profile saved!</div>}
+      {success && <div style={{ color: 'green', marginTop: 10 }}>Профиль сохранён!</div>}
     </form>
   );
 }; 
