@@ -15,8 +15,8 @@ export const NewUserPage: React.FC = () => {
 
   return (
     <div className="new-user-page">
-      <h1>Welcome, New User!</h1>
-      <p>Please tell us about your food preferences. User ID: {initialUserId}</p>
+      <h1>Добро пожаловать в Mealix!</h1>
+      <p> User ID: {initialUserId}</p>
       <SaveUserProfileForm />
     </div>
   );
